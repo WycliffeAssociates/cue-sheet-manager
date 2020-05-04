@@ -13,7 +13,7 @@ repositories {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation 'com.github.WycliffeAssociates:cuelib:1.2.1'
-    implementation 'com.github.WycliffeAssociates:tr-wav:0.2.6'
+    implementation 'com.github.WycliffeAssociates:tr-wav:0.2.7'
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
