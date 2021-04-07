@@ -4,6 +4,7 @@ import com.matthewrussell.trwav.*
 import org.opf_labs.audio.*
 import java.io.File
 import java.io.OutputStreamWriter
+import java.text.MessageFormat
 
 class InvalidWavFileException(message: String? = null) : java.lang.Exception(message)
 
@@ -35,9 +36,15 @@ class CueSheetWriter private constructor() {
 
     private fun initCueSheet() {
         cueSheet.comment = mapper.toJSON(wavFile.metadata)
-        cueSheet.title = listOf(wavFile.metadata.language, wavFile.metadata.anthology, wavFile.metadata.slug)
-            .joinToString("_")
-        val fileData = FileData(cueSheet, wav.name, "WAVE")
+
+        val title = MessageFormat.format(
+            "{}_{}_{}",
+            wavFile.metadata.language,
+            wavFile.metadata.anthology,
+            wavFile.metadata.slug
+        )
+        cueSheet.title = "\"$title\""
+        val fileData = FileData(cueSheet, "\"${wav.name}\"", "WAVE")
         for ((i, cue) in wavFile.metadata.markers.withIndex()) {
             val cueNumber = findCueNumber(cue.label, i)
             val trackData = TrackData(fileData, cueNumber, "AUDIO")
