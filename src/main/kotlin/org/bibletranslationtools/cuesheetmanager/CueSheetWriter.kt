@@ -38,7 +38,7 @@ class CueSheetWriter private constructor() {
         cueSheet.comment = mapper.toJSON(wavFile.metadata)
 
         val title = MessageFormat.format(
-            "{}_{}_{}",
+            "{0}_{1}_{2}",
             wavFile.metadata.language,
             wavFile.metadata.anthology,
             wavFile.metadata.slug
