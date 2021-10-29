@@ -9,6 +9,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.github.johnrengelman.shadow" version "6.1.0"
+}
+
 apply plugin: 'kotlin'
 
 group 'org.bibletranslationtools'
@@ -25,6 +29,7 @@ dependencies {
     implementation 'com.github.WycliffeAssociates:cuelib:1.2.1'
     implementation 'com.github.WycliffeAssociates:tr-wav:0.3.2'
     implementation 'org.wycliffeassociates.otter.common:audio:0.3.1'
+
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }

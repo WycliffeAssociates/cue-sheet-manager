@@ -1,6 +1,10 @@
 package org.bibletranslationtools.cuesheetmanager
 
-import com.matthewrussell.trwav.*
+import com.matthewrussell.trwav.MetadataMapper
+import com.matthewrussell.trwav.WavFile
+import com.matthewrussell.trwav.WavFileReader
+import com.matthewrussell.trwav.CuePoint
+import com.matthewrussell.trwav.SAMPLE_RATE
 import org.opf_labs.audio.*
 import java.io.File
 import java.io.OutputStreamWriter
@@ -20,7 +24,7 @@ class CueSheetWriter private constructor() {
     constructor(wav: File, cueFile: File? = null) : this() {
         this.wav = wav
 
-        if (wav.extension.toLowerCase().endsWith("wav").not()) {
+        if (wav.extension.lowercase().endsWith("wav").not()) {
             throw InvalidWavFileException("Not a wav file")
         }
 
