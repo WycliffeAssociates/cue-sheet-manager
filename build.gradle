@@ -1,12 +1,22 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.61'
+buildscript {
+
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10"
+    }
 }
 
+apply plugin: 'kotlin'
+
 group 'org.bibletranslationtools'
-version '1.4.1'
+version '1.5.0'
 
 repositories {
     mavenCentral()
+    maven { url "https://nexus-registry.walink.org/repository/maven-public/" }
     maven { url 'https://jitpack.io' }
 }
 
@@ -14,6 +24,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation 'com.github.WycliffeAssociates:cuelib:1.2.1'
     implementation 'com.github.WycliffeAssociates:tr-wav:0.3.2'
+    implementation 'org.wycliffeassociates.otter.common:audio:0.3.1'
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }

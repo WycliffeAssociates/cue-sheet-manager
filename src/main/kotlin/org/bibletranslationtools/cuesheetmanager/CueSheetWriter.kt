@@ -45,7 +45,11 @@ class CueSheetWriter private constructor() {
         )
         cueSheet.title = "\"$title\""
         val fileData = FileData(cueSheet, "\"${wav.name}\"", "WAVE")
-        for ((i, cue) in wavFile.metadata.markers.withIndex()) {
+
+        val otterWavFile = org.wycliffeassociates.otter.common.audio.wav.WavFile(wav)
+        val markers = otterWavFile.metadata.getCues().map { CuePoint(it.location, it.label) }
+
+        for ((i, cue) in markers.withIndex()) {
             val cueNumber = findCueNumber(cue.label, i)
             val trackData = TrackData(fileData, cueNumber, "AUDIO")
             trackData.title = cue.label
