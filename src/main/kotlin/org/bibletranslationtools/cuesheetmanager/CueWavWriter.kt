@@ -1,6 +1,11 @@
 package org.bibletranslationtools.cuesheetmanager
 
-import com.matthewrussell.trwav.*
+import com.matthewrussell.trwav.MetadataMapper
+import com.matthewrussell.trwav.WavFile
+import com.matthewrussell.trwav.WavFileReader
+import com.matthewrussell.trwav.WavFileWriter
+import com.matthewrussell.trwav.CuePoint
+import com.matthewrussell.trwav.SAMPLE_RATE
 import org.opf_labs.audio.CueParser
 import org.opf_labs.audio.CueSheet
 import org.opf_labs.audio.TrackData

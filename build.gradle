@@ -9,10 +9,14 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.github.johnrengelman.shadow" version "6.1.0"
+}
+
 apply plugin: 'kotlin'
 
 group 'org.bibletranslationtools'
-version '1.5.0'
+version '1.5.1'
 
 repositories {
     mavenCentral()
@@ -24,7 +28,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation 'com.github.WycliffeAssociates:cuelib:1.2.1'
     implementation 'com.github.WycliffeAssociates:tr-wav:0.3.2'
-    implementation 'org.wycliffeassociates.otter.common:audio:0.3.1'
+    implementation 'org.wycliffeassociates.otter.common:audio:0.3.2'
+
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
