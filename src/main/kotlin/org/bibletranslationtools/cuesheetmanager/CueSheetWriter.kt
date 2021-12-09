@@ -1,7 +1,12 @@
 package org.bibletranslationtools.cuesheetmanager
 
-import com.matthewrussell.trwav.*
+import org.bibletranslationtools.cuesheetmanager.audio.BttrChunk
+import org.bibletranslationtools.cuesheetmanager.audio.BttrMetadataMapper
 import org.opf_labs.audio.*
+import org.wycliffeassociates.otter.common.audio.AudioCue
+import org.wycliffeassociates.otter.common.audio.DEFAULT_SAMPLE_RATE
+import org.wycliffeassociates.otter.common.audio.wav.WavFile
+import org.wycliffeassociates.otter.common.audio.wav.WavMetadata
 import java.io.File
 import java.io.OutputStreamWriter
 import java.text.MessageFormat
@@ -12,15 +17,15 @@ class CueSheetWriter private constructor() {
 
     private lateinit var wav: File
     private lateinit var wavFile: WavFile
+    private lateinit var bttrChunk: BttrChunk
     private lateinit var cueFile: File
-    private val mapper = MetadataMapper()
     private val cueSheet: CueSheet = CueSheet()
 
     @Throws(InvalidWavFileException::class)
     constructor(wav: File, cueFile: File? = null) : this() {
         this.wav = wav
 
-        if (wav.extension.toLowerCase().endsWith("wav").not()) {
+        if (wav.extension.lowercase().endsWith("wav").not()) {
             throw InvalidWavFileException("Not a wav file")
         }
 
@@ -30,24 +35,26 @@ class CueSheetWriter private constructor() {
     }
 
     private fun readWavFile() {
-        wavFile = WavFileReader(wav).read()
-        wavFile.metadata.markers.sortBy { it.location }
+        bttrChunk = BttrChunk()
+        val metadata = WavMetadata(listOf(bttrChunk))
+        wavFile = WavFile(wav, metadata)
     }
 
     private fun initCueSheet() {
-        cueSheet.comment = mapper.toJSON(wavFile.metadata)
+        val mapper = BttrMetadataMapper()
+        cueSheet.comment = mapper.toJSON(bttrChunk.metadata)
 
         val title = MessageFormat.format(
             "{0}_{1}_{2}",
-            wavFile.metadata.language,
-            wavFile.metadata.anthology,
-            wavFile.metadata.slug
+            bttrChunk.metadata.language,
+            bttrChunk.metadata.anthology,
+            bttrChunk.metadata.slug
         )
         cueSheet.title = "\"$title\""
         val fileData = FileData(cueSheet, "\"${wav.name}\"", "WAVE")
 
         val otterWavFile = org.wycliffeassociates.otter.common.audio.wav.WavFile(wav)
-        val markers = otterWavFile.metadata.getCues().map { CuePoint(it.location, it.label) }
+        val markers = otterWavFile.metadata.getCues().map { AudioCue(it.location, it.label) }
 
         for ((i, cue) in markers.withIndex()) {
             val cueNumber = findCueNumber(cue.label, i)
@@ -55,7 +62,7 @@ class CueSheetWriter private constructor() {
             trackData.title = cue.label
             val index = Index()
             index.number = 1
-            index.position = position(cue.location, SAMPLE_RATE)
+            index.position = position(cue.location, DEFAULT_SAMPLE_RATE)
             trackData.indices.add(index)
 
             fileData.trackData.add(trackData)
